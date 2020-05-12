@@ -10,7 +10,9 @@
 <body>
 <h1><%= dayOfWeek %></h1>
 <ul>
-    <li></li>
+    <% for(let i = 0; i < newListItems.length; i++ ) { %>
+        <li><%= newListItems[i] %></li>
+    <% } %>
 </ul>
 
 <form class="" action="/" method="post">
