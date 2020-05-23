@@ -4,7 +4,6 @@ require(__dirname + '/date');
 const mongoose = require('mongoose');
 
 const port = 3000;
-const items = [];
 const workItems = [];
 
 const app = express();
@@ -17,28 +16,13 @@ mongoose.connect('mongodb://localhost:27017/todolistDB', {useUnifiedTopology: tr
 const itemSchema = {
     name: String
 }
-
 const Item = mongoose.model("Item", itemSchema);
 
-const item = new Item({
-    name: 'First thing'
-});
-const item2 = new Item({
-    name: 'Second thing'
-});
-const item3 = new Item({
-    name: 'Third thing'
-});
-
-const defaultItems = [item, item2, item3];
-
-// Item.insertMany(defaultItems, function (err) {
-//     if (err) {
-//         console.log(err)
-//     } else {
-//         console.log('inserted stuff')
-//     }
-// })
+const listSchema = {
+    name: String,
+    items: [itemSchema]
+}
+const List = mongoose.model("List", listSchema);
 
 app.get('/', function (req, res) {
     Item.find({}, function (err, foundItems) {
@@ -50,6 +34,25 @@ app.get('/', function (req, res) {
     })
 
 });
+
+app.get('/:customListName', function (req, res) {
+    const customListName = req.params.customListName;
+
+    List.findOne({name: customListName}, function (err, foundList) {
+        if (err) {
+            console.log(err)
+        } else if (!foundList) {
+            const newList = new List({
+                name: customListName,
+                items: []
+            })
+            newList.save()
+            res.redirect('/' + customListName);
+        } else {
+            res.render('list', {listTitle: foundList.name, newListItems: foundList.items});
+        }
+    })
+})
 
 app.post('/', function (req, res) {
     const itemName = req.body.newItem;
@@ -70,6 +73,7 @@ app.post('/delete', function (req, res) {
         }
     });
 });
+
 
 app.get('/work', function (req, res) {
     res.render("list", {listTitle: "Work List", newListItems: workItems});
