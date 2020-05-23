@@ -52,13 +52,12 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    if (req.body.value === 'Work') {
-        workItems.push(req.body.newItem);
-        res.redirect('/work');
-    } else {
-        items.push(req.body.newItem);
-        res.redirect('/');
-    }
+    const itemName = req.body.newItem;
+    const newItem = new Item({
+        name: itemName
+    });
+    newItem.save()
+    res.redirect('/')
 });
 
 app.get('/work', function (req, res) {
