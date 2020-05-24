@@ -4,10 +4,9 @@ require(__dirname + '/date');
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-const port = process.env.PORT;
+let port = process.env.PORT;
 const workItems = [];
 
-let port = process.env.PORT;
 const workItems = [];
 
 if (port == null || port == "") {
