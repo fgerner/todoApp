@@ -7,8 +7,6 @@ const _ = require('lodash');
 let port = process.env.PORT;
 const workItems = [];
 
-const workItems = [];
-
 if (port == null || port == "") {
     port = 3000;
 }
