@@ -4,8 +4,16 @@ require(__dirname + '/date');
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-const port = 3000;
+const port = process.env.PORT;
 const workItems = [];
+
+let port = process.env.PORT;
+const workItems = [];
+
+if (port == null || port == "") {
+    port = 3000;
+}
+
 
 const app = express();
 app.set("view engine", "ejs");
