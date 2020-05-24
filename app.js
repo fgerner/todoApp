@@ -4,15 +4,23 @@ require(__dirname + '/date');
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-const port = 3000;
+let port = process.env.PORT;
 const workItems = [];
+
+if (port == null || port == "") {
+    port = 3000;
+}
 
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect('mongodb+srv://fred-admin:2005Nkdiitd@cluster0-dyfes.mongodb.net/todolistDB', {useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false})
+mongoose.connect('mongodb+srv://fred-admin:2005Nkdiitd@cluster0-dyfes.mongodb.net/todolistDB', {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useFindAndModify: false
+})
 
 const itemSchema = {
     name: String
@@ -86,12 +94,12 @@ app.post('/delete', function (req, res) {
                 res.redirect("/")
             }
         });
-    }else {
-        List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function (err, foundList){
-            if(!err){
+    } else {
+        List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function (err, foundList) {
+            if (!err) {
                 res.redirect('/' + listName);
             }
-        } )
+        })
     }
 });
 
